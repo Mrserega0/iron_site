@@ -131,7 +131,7 @@ def login():
     return render_template('login.html')
 
 # Выход
-@app.route('/logout')
+@app.route('/logout') 
 def logout():
     session.pop('username', None)
     flash("Вы вышли из системы.", "info")

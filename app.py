@@ -29,49 +29,116 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+import os
+from flask import Flask, render_template, url_for, request, session
 import sqlite3
-from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.utils import redirect,secure_filename
+from werkzeug.security import check_password_hash, generate_password_hash
+from flask_login import LoginManager, login_user, login_required, current_user,logout_user
 
 app = Flask(__name__)
-app.secret_key = "d2f4c5f9f218cb11adf68ab68f1b9cde"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.secret_key = "your_secret_key"
+login_manager = LoginManager(app)
+db = SQLAlchemy(app)
+app.app_context().push()
 
-# Инициализация базы данных
-def init_db():
-    conn = sqlite3.connect("users.db")
-    cursor = conn.cursor()
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL
-    )
-    """)
-    conn.commit()
-    conn.close()
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String, nullable=False, unique=True)
+    password = db.Column(db.String)
+    role = db.Column(db.String, default='user')
+
+    def get(self, user_id):
+        user = self.query.filter_by(id=user_id).first()
+        return user
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.id
+    
+class Products(db.Model):
+  id = db.Column(db.Integer, primary_key = True)
+  name = db.Column(db.String, nullable = False)
+  file_path = db.Column(db.String)
+  user_id = db.Column(db.Integer)
+  discription = db.Column(db.String)
+  price = db.Column(db.Integer)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+@app.route("/reg", methods=['POST', 'GET']) 
+def reg_menu():
+    if request.method == 'POST':
+        email = request.form['login']
+        if User.query.filter_by(email=email).first():
+            return 'Пользователь с таким email уже существует'
+        
+        hash = generate_password_hash(request.form['password'])
+        user = User(email=email, password=hash)
+        db.session.add(user)
+        db.session.commit()
+        login_user(user)
+        return redirect('/')
+    else:
+        return render_template('register.html')
+
+@app.route("/login", methods=['POST', 'GET'])
+def login_menu():
+    if request.method == 'POST':
+        password = request.form['password']
+        email = request.form['login']
+        user = User.query.filter_by(email=email).first()
+        if user and check_password_hash(user.password, password):
+            login_user(user)
+            return redirect('/')
+        else:
+            return redirect('/login')
+    else:
+        return render_template('login.html', cur_user = current_user)
+    
+@app.route("/admin", methods = ['POST', 'GET'])
+@login_required
+def add():
+  if request.method == 'GET':
+    print('get')
+    return render_template('newAdd.html')
+  else:
+    name = request.form['name']
+    price = request.form['price']
+    discription = request.form['discription']
+    file = request.files['file_img']
+    filename = secure_filename(file.filename)
+
+    product = Products(name=name, price = int(price),discription = discription, user_id = str(current_user.id), file_path = 'a' + str(current_user.id) + filename)
+    db.session.add(product)
+    db.session.commit()
+    print('is commit')
+    
+    filename = secure_filename(file.filename)
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'a' + str(current_user.id)+ filename))
+    return redirect ('/')
+    
+def is_admin():
+    return session.get("role") == "admin"
 
 # Главная страница
-@app.route('/')
+@app.route("/")
 def index():
-    return render_template('index.html')
+    products = Products.query.all()
+    return render_template("index.html",products = products, cur_user = current_user)
 
 @app.route('/about')
 def about():
@@ -89,54 +156,12 @@ def service():
 def team():
     return render_template('team.html')
 
-# Регистрация
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        hashed_password = generate_password_hash(password)
-        
-        try:
-            conn = sqlite3.connect("users.db")
-            cursor = conn.cursor()
-            cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, hashed_password))
-            conn.commit()
-            conn.close()
-            flash("Вы успешно зарегистрировались!", "success")
-            return redirect(url_for('login'))
-        except sqlite3.IntegrityError:
-            flash("Имя пользователя уже занято!", "danger")
-    return render_template('register.html')
-
-# Вход
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        
-        conn = sqlite3.connect("users.db")
-        cursor = conn.cursor()
-        cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
-        result = cursor.fetchone()
-        conn.close()
-        
-        if result and check_password_hash(result[0], password):
-            session['username'] = username
-            flash("Вы успешно вошли в систему!", "success")
-            return redirect(url_for('index'))
-        else:
-            flash("Неправильное имя пользователя или пароль!", "danger")
-    return render_template('login.html')
-
 # Выход
 @app.route('/logout') 
 def logout():
-    session.pop('username', None)
-    flash("Вы вышли из системы.", "info")
-    return redirect(url_for('login'))
+    logout_user()
+    return redirect(url_for('index'))
 
-if __name__ == '_main_':
-    init_db()
+if __name__ == '__main__':
     app.run(debug=True)
+

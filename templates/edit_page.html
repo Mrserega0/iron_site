@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Редактировать страницу</title>
+</head>
+<body>
+    <h1>Редактировать страницу</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <label for="title">Заголовок:</label>
+        <input type="text" id="title" name="title" value="{{ page.title }}" required><br><br>
+        <label for="content">Содержимое:</label><br>
+        <textarea id="content" name="content" rows="10" cols="50" required>{{ page.content }}</textarea><br><br>
+        <label for="image">Изображение (если хотите заменить):</label>
+        <input type="file" id="image" name="image"><br><br>
+        {% if page.image_path %}
+        <p>Текущее изображение:</p>
+        <img src="{{ url_for('static', filename=page.image_path.split('static/')[-1]) }}" alt="Изображение" width="200"><br><br>
+        {% endif %}
+        <button type="submit">Сохранить изменения</button>
+    </form>
+</body>
+</html>

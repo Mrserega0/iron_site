@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }}</title>
+    <style>
+        .edit-form {
+            display: none;
+            margin-top: 20px;
+        }
+        .edit-btn {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        function toggleEditForm() {
+            const form = document.querySelector(".edit-form");
+            form.style.display = form.style.display === "none" ? "block" : "none";
+        }
+    </script>
+</head>
+<body>
+    <h1>{{ page.title }}</h1>
+    {% if page.image_path %}
+    <div>
+        <!-- Путь обновлен на images -->
+        <img src="{{ url_for('static', filename=page.image_path.split('static/')[1]) }}" alt="Изображение" style="max-width:100%;">
+    </div>
+    {% endif %}
+    <div>
+        <p>{{ page.content }}</p>
+    </div>
+
+    {% if is_admin %}
+    <div>
+        <span class="edit-btn" onclick="toggleEditForm()">Редактировать</span>
+        <form class="edit-form" method="POST" enctype="multipart/form-data">
+            <label for="title">Заголовок:</label>
+            <input type="text" id="title" name="title" value="{{ page.title }}" required><br><br>
+            <label for="content">Содержимое:</label><br>
+            <textarea id="content" name="content" rows="10" cols="50" required>{{ page.content }}</textarea><br><br>
+            <label for="image">Изображение:</label>
+            <input type="file" id="image" name="image"><br><br>
+            <button type="submit">Сохранить изменения</button>
+        </form>
+    </div>
+    {% endif %}
+</body>
+</html>

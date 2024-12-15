@@ -1,25 +1,3 @@
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <title>Главная</title>
-</head>
-<body>
-    <h1>Добро пожаловать на главную страницу!</h1>
-
-    {% if current_user.is_authenticated %}
-        <p>Привет, {{ current_user.email }}!</p>
-        <a href="{{ url_for('logout') }}">Выйти</a>
-    {% else %}
-        <a href="{{ url_for('login_menu') }}">Войти в аккаунт</a>
-    {% endif %}
-</body>
-</html> -->
-
-
-
-
-
-
 <!DOCTYPE html>
 <html>
 
@@ -86,17 +64,6 @@
                 <li class="nav-item">
                   <a class="nav-link" href="/contact">Contact Us</a>
                 </li>
-                <!-- {% for page in pages %}
-                <li><a href="{{ url_for('view_page', page_id=page.id) }}">{{ page.title }}</a></li>
-                {% endfor %} -->
-                <!-- <li class="dropdown nav-item">
-                  <a href="#" class="nav-link">articles</a>
-                  <div class="dropdown-content">
-                    {% for page in pages %}
-                    <a href="{{ url_for('view_page', page_id=page.id) }}">{{ page.title }}</a>
-                    {% endfor %}
-                  </div>  
-                </li> -->
                 <li class="dropdown nav-item">
                   <a href="#" class="nav-link">Articles</a>
                   <div class="dropdown-content">

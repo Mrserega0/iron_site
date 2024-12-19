@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Добавить страницу</title>
+</head>
+<body>
+    <h1>Добавить новую страницу</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <label for="title">Заголовок:</label>
+        <input type="text" id="title" name="title" required><br><br>
+        <label for="content">Содержимое:</label><br>
+        <textarea id="content" name="content" rows="10" cols="50" required></textarea><br><br>
+        <label for="content_title">Содержимое-титл</label><br>
+        <textarea id="content_title" name="content_title" rows="2" cols="20" required></textarea><br><br>
+        <label for="image">Изображение:</label>
+        <input type="file" id="image" name="image"><br><br>
+        <button type="submit">Добавить</button>
+    </form>
+</body>
+</html>
+

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Регистрация</title>
+    <link rel="stylesheet" type="text/css" href="static/css/register.css" />
+</head>
+<body>
+    <form method="POST">
+        <h2>Регистрация</h2>
+        <label>Имя пользователя:</label>
+        <input type="text" name="login" required>
+        <label>Пароль:</label>
+        <input type="password" name="password" required>
+        <button type="submit">Зарегистрироваться</button>
+        <p>{{ regis }}</p>
+        <a href="{{ url_for('login_menu') }}" class="login-link">Уже есть аккаунт? Войти</a>
+    </form>
+</body>
+</html>

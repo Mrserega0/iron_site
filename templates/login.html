@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Вход</title>
+</head>
+    <link rel="stylesheet" type="text/css" href="static/css/login.css" />
+<body>
+    <form method="POST">
+        <h2>Вход</h2>
+        <label>Имя пользователя:</label>
+        <input type="text" name="login" required>
+        <label>Пароль:</label>
+        <input type="password" name="password" required>
+        <button type="submit">Войти</button>
+        <p> {{ log }}</p>
+        <a href="{{ url_for('reg_menu') }}" class="register-link">Нет аккаунта? Зарегистрироваться</a>
+    </form>
+</body>
+</html>

@@ -47,10 +47,15 @@ class User(db.Model):
 class Page(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
-    content = db.Column(db.Text, nullable=False)
-    content_title = db.Column(db.Text, nullable=False)
-    image_path = db.Column(db.String, nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    content1 = db.Column(db.Text, nullable=False)
+    content2 = db.Column(db.Text, nullable=False)
+    content3 = db.Column(db.Text, nullable=False)
+    
+    content_title1 = db.Column(db.Text, nullable=False)
+    content_title2 = db.Column(db.Text, nullable=False)
+    content_title3 = db.Column(db.Text, nullable=False)
+    
     age = db.Column(db.Integer)
 
 # Загрузка пользователя по для flask-login
@@ -101,17 +106,16 @@ def add_page():
 
     if request.method == "POST":
         title = request.form["title"]
-        content = request.form["content"]
-        content_title = request.form["content_title"] 
-        file = request.files.get("image")
-        image_path = None
+        content1 = request.form["content1"]
+        content_title1 = request.form["content_title1"]
+        
+        content2 = request.form["content2"]
+        content_title2 = request.form["content_title2"]      
+        
+        content3 = request.form["content3"]
+        content_title3 = request.form["content_title3"]  
 
-        if file:
-            filename = secure_filename(file.filename)
-            image_path = os.path.join("static/images", filename)
-            file.save(os.path.join(app.root_path, image_path))
-
-        new_page = Page(title=title, content=content, image_path=image_path,content_title=content_title)
+        new_page = Page(title=title, content1=content1,content_title1=content_title1,content2=content2,content_title2=content_title2,content3=content3,content_title3=content_title3)
         db.session.add(new_page)
         db.session.commit()
         return redirect("/")
@@ -121,28 +125,51 @@ def add_page():
 # Маршрут для просмотра страницы
 @app.route("/page/<int:page_id>", methods=["GET", "POST"])
 def view_page(page_id):
-    page = Page.query.get_or_404(page_id)  # Получаем страницу по ID или возвращаем 404
+    page = Page.query.get_or_404(page_id)
 
-    if request.method == "POST":  # Если отправлена форма редактирования страницы
-        if not current_user.is_authenticated or current_user.role != "admin":  # Проверяем права доступа
+    if request.method == "POST":
+        if not current_user.is_authenticated or current_user.role != "admin":
             return "Доступ запрещен", 403
 
-        page.title = request.form["title"]
-        page.content = request.form["content"]
-        page.content_title = request.form["content_title"] 
-        file = request.files.get("image")
+        page.title = request.form.get("title", page.title)
+        page.content1 = request.form.get("content1", page.content1)
+        page.content_title1 = request.form.get("content_title1", page.content_title1)
+        page.content2 = request.form.get("content2", page.content2)
+        page.content_title2 = request.form.get("content_title2", page.content_title2)
+        page.content3 = request.form.get("content3", page.content3)
+        page.content_title3 = request.form.get("content_title3", page.content_title3)
 
-        if file:
-            filename = secure_filename(file.filename)  # Безопасное имя файла
-            image_path = os.path.join("static/images", filename).replace("\\", "/")  # Преобразование пути
-            file.save(os.path.join(app.root_path, image_path))  # Сохранение файла
+        db.session.commit()
+        return redirect(url_for('view_page', page_id=page_id))
 
+    is_admin = current_user.is_authenticated and current_user.role == "admin"
+    return render_template("view_page.html", page=page, is_admin=is_admin)
+
+@app.route('/edit_page/<int:page_id>', methods=['GET', 'POST'])
+@login_required
+def edit_page(page_id):
+    page = Page.query.get(page_id)
+    if not page:
+        return "Страница не найдена", 404
+
+    if request.method == 'POST':
+        if current_user.role != "admin":
+            return "Доступ запрещен", 403
+
+        # Обновляем данные
+        page.title = request.form.get('title', page.title)
+        page.content1 = request.form.get('content1', page.content1)
+        page.content_title1 = request.form.get('content_title1', page.content_title1)
+        page.content2 = request.form.get('content2', page.content2)
+        page.content_title2 = request.form.get('content_title2', page.content_title2)
+        page.content3 = request.form.get('content3', page.content3)
+        page.content_title3 = request.form.get('content_title3', page.content_title3)
 
         db.session.commit()  # Сохраняем изменения в базе данных
-        return redirect(url_for('view_page', page_id=page_id))  # Перенаправляем на страницу
+        return redirect(url_for('view_page', page_id=page_id))
 
-    is_admin = current_user.is_authenticated and current_user.role == "admin"  # Проверяем, является ли пользователь администратором
-    return render_template("view_page.html", page=page, is_admin=is_admin)  # Отображаем страницу
+    return render_template('edit_page.html', page=page)
+
 
 # Проверка, является ли пользователь администратором
 def is_admin():

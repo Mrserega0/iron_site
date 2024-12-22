@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/add_page.css') }}">
     <title>Добавить страницу</title>
 </head>
 <body>
-    <h1>Добавить новую страницу</h1>
     <form method="POST" enctype="multipart/form-data">
         <label for="title">Заголовок:</label>
-        <input type="text" id="title" name="title" required><br><br>
-        <label for="content">Содержимое:</label><br>
-        <textarea id="content" name="content" rows="10" cols="50" required></textarea><br><br>
-        <label for="content_title">Содержимое-титл</label><br>
-        <textarea id="content_title" name="content_title" rows="2" cols="20" required></textarea><br><br>
-        <label for="image">Изображение:</label>
-        <input type="file" id="image" name="image"><br><br>
+        <input type="text" id="title" name="title" required><br>
+        <label for="content1">Содержимое статьи 1</label><br>
+        <textarea id="content1" name="content1" rows="10" cols="10" required></textarea><br>
+        <label for="content2">Содержимое статьи 2</label><br>
+        <textarea id="content2" name="content2" rows="10" cols="10" required></textarea><br>
+        <label for="content3">Содержимое статьи 3</label><br>
+        <textarea id="content3" name="content3" rows="10" cols="10" required></textarea><br>
+        <label for="content_title1">Название статьи 1</label><br>
+        <textarea id="content_title1" name="content_title1" rows="2" cols="20" required></textarea><br>
+        <label for="content_title2">Название статьи 2</label><br>
+        <textarea id="content_title2" name="content_title2" rows="2" cols="20" required></textarea><br>
+        <label for="content_title3">Название статьи 3</label><br>
+        <textarea id="content_title3" name="content_title3" rows="2" cols="20" required></textarea><br>
         <button type="submit">Добавить</button>
     </form>
 </body>

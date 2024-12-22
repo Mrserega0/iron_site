@@ -3,18 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ page.title }}</title>
-    <script>
-        function toggleEditForm() {
-            const form = document.querySelector(".edit-form");
-            form.style.display = form.style.display === "none" ? "block" : "none";
-        }
-    </script>
-</head>
 
-<head>
-    <meta charset="utf-8" />
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="keywords" content="" />
@@ -25,6 +16,8 @@
 
     <!-- bootstrap core css -->
     <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/add_page.css') }}">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -46,23 +39,8 @@
 </head>
 
 <body>
-
-    <!-- {% if is_admin %}
-    <div>
-        <span class="edit-btn" onclick="toggleEditForm()">Редактировать</span>
-        <form class="edit-form" method="POST" enctype="multipart/form-data">
-            <label for="title">Заголовок:</label>
-            <input type="text" id="title" name="title" value="{{ page.title }}" required><br><br>
-            <label for="content">Содержимое:</label><br>
-            <textarea id="content" name="content" rows="10" cols="50" required>{{ page.content }}</textarea><br><br>
-            <label for="image">Изображение:</label>
-            <input type="file" id="image" name="image"><br><br>
-            <button type="submit">Сохранить изменения</button>
-        </form>
-    </div>
-    {% endif %}  -->
     <form class="edit-form" method="POST" enctype="multipart/form-data"></form>
-    <div class="hero_area">
+    <div class="hero_area div1">
         <div class="hero_bg_box">
             <img src="{{ url_for('static', filename=page.image_path) }}" alt="Image">
         </div>
@@ -147,10 +125,10 @@
                                 <div class="col-lg-10 col-md-11 mx-auto">
                                     <div class="detail-box text-container">
                                         <h1>
-                                            {{ page.content_title }}
+                                            {{ page.content_title1 }}
                                         </h1>
                                         <p>
-                                            {{ page.content }}
+                                            {{ page.content1 }}
                                         </p>
                                     </div>
                                 </div>
@@ -169,10 +147,10 @@
                                 <div class="col-lg-10 col-md-11 mx-auto">
                                     <div class="detail-box text-container">
                                         <h1>
-                                            {{ page.content_title }}
+                                            {{ page.content_title2 }}
                                         </h1>
                                         <p>
-                                            {{ page.content }}
+                                            {{ page.content2 }}
                                         </p>
                                     </div>
                                 </div>
@@ -191,11 +169,12 @@
                                 <div class="col-lg-10 col-md-11 mx-auto">
                                     <div class="detail-box">
                                         <h1>
-                                            {{ page.content_title }}
+                                            {{ page.content_title3 }}
                                         </h1>
                                         <p>
-                                            {{ page.content }}
+                                            {{ page.content3 }}
                                         </p>
+
                                     </div>
                                 </div>
                             </div>
@@ -204,7 +183,33 @@
                 </div>
             </div>
         </section>
-        
+    </div>
+    {% if is_admin %}
+    <div class=".back1">
+
+        <span class="edit-btn" onclick="toggleEditForm()">Редактировать</span>
+        <form action="/edit_page/{{ page.id }}" method="POST">
+            <label for="title">Заголовок:</label>
+            <input type="text" id="title" name="title" value="{{ page.title }}" required><br><br>
+            <label for="content1">Содержимое статьи 1</label><br>
+            <textarea id="content1" name="content1" rows="10" cols="50" required>{{ page.content1 }}</textarea><br><br>
+            <label for="content2">Содержимое статьи 2</label><br>
+            <textarea id="content2" name="content2" rows="10" cols="50" required>{{ page.content2 }}</textarea><br><br>
+            <label for="content3">Содержимое статьи 3</label><br>
+            <textarea id="content3" name="content3" rows="10" cols="50" required>{{ page.content3 }}</textarea><br><br>
+            <label for="content_title1">Название статьи 1</label><br>
+            <textarea id="content_title1" name="content_title1" rows="10" cols="50"
+                required>{{ page.content_title1 }}</textarea><br><br>
+            <label for="content_title2">Название статьи 2</label><br>
+            <textarea id="content_title2" name="content_title2" rows="10" cols="50"
+                required>{{ page.content_title2 }}</textarea><br><br>
+            <label for="content_title3">Название статьи 3</label><br>
+            <textarea id="content_title3" name="content_title3" rows="10" cols="50"
+                required>{{ page.content_title3 }}</textarea><br><br>
+            <button type="submit">Сохранить изменения</button>
+        </form>
+    </div>
+    {% endif %}
 </body>
 
 </html>

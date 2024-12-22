@@ -1,0 +1,49 @@
+/* Заголовок страницы */
+h1 {
+    font-size: 24px;
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Стили для меток */
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+/* Стили для полей ввода */
+input[type="text"], textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+
+
+
+
+.div1 {
+    background-color: #898888;
+}
+
+textarea {
+    resize: vertical;
+}
+
+form h1:first-of-type {
+    margin-top: 0;
+    font-size: 20px;
+    color: #444;
+    text-align: center;
+}
+
+.back1 {
+    background-color: #0056b3;
+}

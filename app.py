@@ -24,6 +24,7 @@ class User(db.Model):
     password = db.Column(db.String)
     role = db.Column(db.String, default='user')
     age = db.Column(db.Integer)
+    name = db.Column(db.String, nullable=False, unique=True)
 
     # Метод для получения пользователя по id
     def get(self, user_id):
@@ -42,6 +43,9 @@ class User(db.Model):
 
     def get_id(self):
         return self.id
+    
+    def is_authenticated(self):
+        return True
 
 # Модель новых страниц
 class Page(db.Model):
@@ -68,12 +72,13 @@ def load_user(user_id):
 def reg_menu():
     if request.method == 'POST':  # Если отправлена форма регистрации
         email = request.form['login']  # Получаем email из формы
+        name = request.form['name']
         if User.query.filter_by(email=email).first():  # Проверяем, существует ли пользователь
             regis = "Пользователь с таким email уже существует."
             return render_template("register.html", regis=regis)
         
         hash = generate_password_hash(request.form['password'])  # Хэшируем пароль
-        user = User(email=email, password=hash)  # Создаем нового пользователя
+        user = User(email=email, password=hash, name=name)  # Создаем нового пользователя
         db.session.add(user)  # Добавляем пользователя в базу данных
         db.session.commit()  # Сохраняем изменения
         login_user(user)  # Авторизуем пользователя
@@ -182,24 +187,9 @@ def index():
     return render_template("index.html", cur_user=current_user, pages=pages)
 
 
-@app.route('/about')
-def about():
-    return render_template('about.html')
-
-
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
-
-
-@app.route('/service')
-def service():
-    return render_template('service.html')
-
-
-@app.route('/team')
-def team():
-    return render_template('team.html')
+@app.route('/account')
+def account():
+    return render_template('account.html')
 
 @app.context_processor
 def inject_pages():

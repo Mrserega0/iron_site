@@ -1,0 +1,132 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    background: #1e1e2f;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, #2a2a40, #3a3a55);
+    padding: 2rem;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    font-size: 1rem;
+    color: #a0a0a0;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    padding: 2rem;
+}
+
+.profile img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 1.5rem;
+    border: 3px solid #3a3a55;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.profile .info {
+    flex: 1;
+}
+
+.profile .info h2 {
+    font-size: 1.6rem;
+    margin-bottom: 0.3rem;
+    color: #ffffff;
+}
+
+.profile .info p {
+    font-size: 1rem;
+    color: #b0b0b0;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-around;
+    padding: 1.5rem;
+    background: #2a2a40;
+    border-top: 1px solid #444;
+}
+
+.actions button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    color: #fff;
+    background: #4a4a70;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.actions button:hover {
+    background: #5a5a80;
+    transform: scale(1.05);
+}
+
+.content {
+    padding: 2rem;
+}
+
+.content h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #3a3a55;
+    padding-bottom: 0.5rem;
+    color: #ffffff;
+}
+
+.content p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: #c0c0c0;
+}
+
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.9rem;
+    color: #777;
+    background: #1e1e2f;
+    border-top: 1px solid #444;
+}
+
+h2 {
+    text-align: center;
+}
+
+p {
+    text-align: center;
+}

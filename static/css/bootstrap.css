@@ -4145,7 +4145,7 @@ input[type="button"].btn-block {
 }
 
 .navbar {
-  position: relative;
+  position: fixed;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
@@ -4154,7 +4154,11 @@ input[type="button"].btn-block {
   align-items: center;
   -ms-flex-pack: justify;
   justify-content: space-between;
-  padding: 0.5rem 1rem;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #0a0a0a;
+  z-index: 1000;
 }
 
 .navbar > .container,
@@ -10073,3 +10077,15 @@ a.text-dark:hover, a.text-dark:focus {
   background-color: rgba(0, 0, 0, 0.1);  /* Легкий фон при наведении */
   color:#10707f;  /* Цвет текста при наведении */
 }
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+

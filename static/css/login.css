@@ -26,7 +26,8 @@ label {
     color: #b0b0b5;
 }
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="email"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
